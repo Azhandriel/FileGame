@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour {
+public class PlayerMove : MonoBehaviour
+{
 
     [SerializeField] private string horizontalInptuName;
     [SerializeField] private string verticalInptuName;
@@ -10,13 +11,17 @@ public class PlayerMove : MonoBehaviour {
 
     private CharacterController charController;
 
+    bool can_Move;
+
     private void Awake()
     {
+        can_Move = true;
         charController = GetComponent<CharacterController>();
     }
 
     private void Update()
     {
+        if(can_Move)
         PlayerMovement();
     }
 
@@ -29,5 +34,20 @@ public class PlayerMove : MonoBehaviour {
         Vector3 rightMovement = transform.right * horizInput;
 
         charController.SimpleMove(forwardMovement + rightMovement);
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.transform.root.name != "_Level")
+        {
+            Destroy(hit.transform.gameObject);
+            GUI_HUD.instance.fileCollected(hit.transform.name);
+        }
+            
+    }
+
+    public void stop_Movement()
+    {
+        can_Move = false;
     }
 }
