@@ -6,12 +6,17 @@ public class PlayerMove : MonoBehaviour
 {
 
     [SerializeField] private string horizontalInptuName;
-    [SerializeField] private string verticalInptuName;
+    [SerializeField] private string verticalInputName;
     [SerializeField] private float movementSpeed;
+    [SerializeField] private AnimationCurve jumpFallOff;
+    [SerializeField] private float jumpMultiplier;
+    [SerializeField] private KeyCode jumpKey;
 
     private CharacterController charController;
 
     bool can_Move;
+
+    private bool isJumping;
 
     private void Awake()
     {
@@ -28,12 +33,14 @@ public class PlayerMove : MonoBehaviour
     private void PlayerMovement()
     {
         float horizInput = Input.GetAxis(horizontalInptuName) * movementSpeed;
-        float vertInput = Input.GetAxis(verticalInptuName) * movementSpeed;
+        float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
 
         Vector3 forwardMovement = transform.forward * vertInput;
         Vector3 rightMovement = transform.right * horizInput;
 
         charController.SimpleMove(forwardMovement + rightMovement);
+
+        JumpInput();
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
@@ -54,5 +61,29 @@ public class PlayerMove : MonoBehaviour
     public void start_Movement()
     {
         can_Move = true;
+    }
+
+    private void JumpInput()
+    {
+        if(Input.GetKeyDown(jumpKey) && !isJumping)
+        {
+            isJumping = true;
+            StartCoroutine(JumpEvent());
+        }
+    }
+
+    private IEnumerator JumpEvent()
+    {
+        float timeInAir = 0.0f;
+
+        do
+        {
+            float jumpForce = jumpFallOff.Evaluate(timeInAir);
+            charController.Move(Vector3.up * jumpForce * jumpMultiplier * Time.deltaTime);
+            timeInAir += Time.deltaTime;
+            yield return null;
+        } while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
+
+        isJumping = false;
     }
 }
