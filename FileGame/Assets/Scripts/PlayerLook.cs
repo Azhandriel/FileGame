@@ -21,7 +21,7 @@ public class PlayerLook : MonoBehaviour {
     private void LockCursor()
     {
 
-        Cursor.lockState = CursorLockMode.Locked;
+       // Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -42,5 +42,11 @@ public class PlayerLook : MonoBehaviour {
     {
         can_Move = false;
         playerBody.GetComponent<PlayerMove>().stop_Movement();
+    }
+
+    public void start_Movement()
+    {
+        can_Move = true;
+        playerBody.GetComponent<PlayerMove>().start_Movement();
     }
 }

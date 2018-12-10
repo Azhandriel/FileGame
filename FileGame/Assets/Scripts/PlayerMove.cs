@@ -50,4 +50,9 @@ public class PlayerMove : MonoBehaviour
     {
         can_Move = false;
     }
+
+    public void start_Movement()
+    {
+        can_Move = true;
+    }
 }

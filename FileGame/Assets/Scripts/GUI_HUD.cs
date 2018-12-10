@@ -7,13 +7,14 @@ using UnityEngine.SceneManagement;
 public class GUI_HUD : MonoBehaviour {
 
     public static GUI_HUD instance;
+    static bool Ist_Time = true;
 
     public Text TextFile_Total_Text, ImageFile_Total_Text, VideoFile_Total_Text;
     public Text TextFile_Collected_Text, ImageFile_Collected_Text, VideoFile_Collected_Text;
 
     public Text gameOverReason;
 
-    public GameObject GamePlay_Mode,gameComplete_Mode, GameOver_Mode;
+    public GameObject GameStart_Mode,GamePlay_Mode, gameComplete_Mode, GameOver_Mode;
 
     public GameObject[] health;
 
@@ -24,6 +25,24 @@ public class GUI_HUD : MonoBehaviour {
     private void Awake()
     {
         instance = this;
+       
+
+        if (Ist_Time)
+        {
+            PlayerLook.instance.stop_Movement();
+            GameStart_Mode.SetActive(true);
+            GamePlay_Mode.SetActive(false);
+
+        }
+
+        else
+        {
+
+            GameStart_Mode.SetActive(false);
+            GamePlay_Mode.SetActive(true);
+        }
+
+        Ist_Time = false;
     }
 
     // Use this for initialization
@@ -52,10 +71,11 @@ public class GUI_HUD : MonoBehaviour {
 
         if (name.Contains("TEXT"))
         {
-            TextFile_Collected++;
+            
 
-            if (TextFile_Collected <= TextFile_ToCollect)
+            if (TextFile_Collected < TextFile_ToCollect)
             {
+                TextFile_Collected++;
                 TextFile_Collected_Text.text = "" + TextFile_Collected;
                 Sounds_Manager.Instance.play_Audio(0);
             }
@@ -75,10 +95,11 @@ public class GUI_HUD : MonoBehaviour {
 
         if (name.Contains("IMAGE"))
         {
-            ImageFile_Collected++;
+            
 
-            if (ImageFile_Collected <= ImageFile_ToCollect)
+            if (ImageFile_Collected < ImageFile_ToCollect)
             {
+                ImageFile_Collected++;
                 ImageFile_Collected_Text.text = "" + ImageFile_Collected;
                 Sounds_Manager.Instance.play_Audio(0);
             }
@@ -96,10 +117,11 @@ public class GUI_HUD : MonoBehaviour {
 
         if (name.Contains("VIDEO"))
         {
-            VideoFile_Collected++;
+            
 
-            if (VideoFile_Collected <= VideoFile_ToCollect)
+            if (VideoFile_Collected < VideoFile_ToCollect)
             {
+                VideoFile_Collected++;
                 VideoFile_Collected_Text.text = "" + VideoFile_Collected;
                 Sounds_Manager.Instance.play_Audio(0);
             }
@@ -149,6 +171,18 @@ public class GUI_HUD : MonoBehaviour {
     public void Next()
     {
         SceneManager.LoadScene("GamePlay");
+    }
+
+    public void Play()
+    {
+        PlayerLook.instance.start_Movement();
+        GameStart_Mode.SetActive(false);
+        GamePlay_Mode.SetActive(true);
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
 
