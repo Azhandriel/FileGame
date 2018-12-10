@@ -38,7 +38,7 @@ public class PlayerMove : MonoBehaviour
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.transform.root.name != "_Level")
+        if (hit.transform.root.name != "_Level"  && hit.transform.root.name != "Robot")
         {
             Destroy(hit.transform.gameObject);
             GUI_HUD.instance.fileCollected(hit.transform.name);
