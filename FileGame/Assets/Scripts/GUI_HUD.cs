@@ -15,8 +15,11 @@ public class GUI_HUD : MonoBehaviour {
 
     public GameObject GamePlay_Mode,gameComplete_Mode, GameOver_Mode;
 
+    public GameObject[] health;
+
     int TextFile_ToCollect, ImageFile_ToCollect, VideoFile_ToCollect;
     int TextFile_Collected, ImageFile_Collected, VideoFile_Collected;
+    public int life;
 
     private void Awake()
     {
@@ -58,7 +61,13 @@ public class GUI_HUD : MonoBehaviour {
             }
             else
             {
-               
+                life--;
+                health[life].SetActive(false);
+
+                Sounds_Manager.Instance.play_Audio(1);
+
+
+                if (life <1)
                 gameOver("TEXT");
             }
         }
@@ -74,8 +83,13 @@ public class GUI_HUD : MonoBehaviour {
             }
             else
             {
-                
-                gameOver("IMAGE");
+                life--;
+                health[life].SetActive(false);
+
+                Sounds_Manager.Instance.play_Audio(1);
+
+                if (life < 1)
+                    gameOver("IMAGE");
             }
         }
 
@@ -90,7 +104,13 @@ public class GUI_HUD : MonoBehaviour {
             }
             else
             {
-                gameOver("VIDEO");
+                life--;
+                health[life].SetActive(false);
+
+                Sounds_Manager.Instance.play_Audio(1);
+
+                if (life < 1)
+                    gameOver("VIDEO");
             }
         }
 
@@ -112,7 +132,7 @@ public class GUI_HUD : MonoBehaviour {
 
     void gameOver(string reason)
     {
-        Sounds_Manager.Instance.play_Audio(1);
+        
         PlayerLook.instance.stop_Movement();
         gameOverReason.text = reason;
         GamePlay_Mode.SetActive(false);
@@ -127,6 +147,7 @@ public class GUI_HUD : MonoBehaviour {
 
     public void Next()
     {
+        SceneManager.LoadScene("GamePlay");
     }
 
 
