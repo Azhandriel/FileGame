@@ -61,6 +61,7 @@ public class GUI_HUD : MonoBehaviour {
             }
             else
             {
+                
                 life--;
                 health[life].SetActive(false);
 
